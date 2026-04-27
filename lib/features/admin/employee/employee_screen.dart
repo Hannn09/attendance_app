@@ -1,6 +1,6 @@
-import 'package:attendance_cnn_app/features/admin/emloyee/widgets/employee_list_tab_content.dart';
-import 'package:attendance_cnn_app/features/admin/emloyee/widgets/employee_tab_bar.dart';
-import 'package:attendance_cnn_app/features/admin/emloyee/widgets/schedule_tab_content.dart';
+import 'package:attendance_cnn_app/features/admin/employee/widgets/employee_list_tab_content.dart';
+import 'package:attendance_cnn_app/features/admin/employee/widgets/employee_tab_bar.dart';
+import 'package:attendance_cnn_app/features/admin/employee/widgets/schedule_tab_content.dart';
 import 'package:attendance_cnn_app/utils/themes.dart';
 import 'package:flutter/material.dart';
 

@@ -1,5 +1,5 @@
-import 'package:attendance_cnn_app/features/admin/emloyee/employee_screen.dart';
-import 'package:attendance_cnn_app/features/admin/emloyee/widgets/add_employee_screen.dart';
+import 'package:attendance_cnn_app/features/admin/employee/employee_screen.dart';
+import 'package:attendance_cnn_app/features/admin/employee/widgets/add_employee_screen.dart';
 import 'package:attendance_cnn_app/features/admin/home/home_admin_screen.dart';
 import 'package:attendance_cnn_app/features/admin/main/main_admin_screen.dart';
 import 'package:attendance_cnn_app/features/admin/profile/profile_admin_screen.dart';

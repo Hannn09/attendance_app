@@ -1,4 +1,4 @@
-import 'package:attendance_cnn_app/features/admin/emloyee/widgets/employee_list_item.dart';
+import 'package:attendance_cnn_app/features/admin/employee/widgets/employee_list_item.dart';
 import 'package:attendance_cnn_app/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

@@ -1,7 +1,7 @@
-import 'package:attendance_cnn_app/features/admin/emloyee/models/shift_type.dart';
-import 'package:attendance_cnn_app/features/admin/emloyee/widgets/schedule_date_selector.dart';
-import 'package:attendance_cnn_app/features/admin/emloyee/widgets/schedule_employee_card.dart';
-import 'package:attendance_cnn_app/features/admin/emloyee/widgets/shift_selection_modal.dart';
+import 'package:attendance_cnn_app/features/admin/employee/models/shift_type.dart';
+import 'package:attendance_cnn_app/features/admin/employee/widgets/schedule_date_selector.dart';
+import 'package:attendance_cnn_app/features/admin/employee/widgets/schedule_employee_card.dart';
+import 'package:attendance_cnn_app/features/admin/employee/widgets/shift_selection_modal.dart';
 import 'package:attendance_cnn_app/utils/themes.dart';
 import 'package:flutter/material.dart';
 
@@ -98,7 +98,9 @@ class _ScheduleTabContentState extends State<ScheduleTabContent> {
     for (var employee in dummyEmployees) {
       final employeeId = employee['id'] as String;
       _employeeSchedules[employeeId] = {
-        _getDateKey(DateTime.now()): ShiftTypeExtension.fromString(employee['shiftType'] as String),
+        _getDateKey(DateTime.now()): ShiftTypeExtension.fromString(
+          employee['shiftType'] as String,
+        ),
       };
     }
   }
@@ -116,7 +118,11 @@ class _ScheduleTabContentState extends State<ScheduleTabContent> {
     return ShiftType.pagi;
   }
 
-  void _updateEmployeeShift(String employeeId, DateTime date, ShiftType newShift) {
+  void _updateEmployeeShift(
+    String employeeId,
+    DateTime date,
+    ShiftType newShift,
+  ) {
     final dateKey = _getDateKey(date);
     setState(() {
       if (_employeeSchedules[employeeId] == null) {
@@ -140,7 +146,11 @@ class _ScheduleTabContentState extends State<ScheduleTabContent> {
     return employees;
   }
 
-  void _showShiftModal(String employeeId, String employeeName, ShiftType currentShift) {
+  void _showShiftModal(
+    String employeeId,
+    String employeeName,
+    ShiftType currentShift,
+  ) {
     ShiftSelectionModal.show(
       context,
       employeeName: employeeName,
@@ -188,7 +198,10 @@ class _ScheduleTabContentState extends State<ScheduleTabContent> {
               });
             },
             child: Container(
-              padding: EdgeInsetsGeometry.symmetric(horizontal: 16, vertical: 8),
+              padding: EdgeInsetsGeometry.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
               decoration: BoxDecoration(
                 color: isSelected ? primaryColor : Colors.transparent,
                 borderRadius: BorderRadius.circular(20),
@@ -200,10 +213,7 @@ class _ScheduleTabContentState extends State<ScheduleTabContent> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (filter != null) ...[
-                    Text(
-                      filter.emoji,
-                      style: TextStyle(fontSize: 14),
-                    ),
+                    Text(filter.emoji, style: TextStyle(fontSize: 14)),
                     SizedBox(width: 4),
                   ],
                   Text(
@@ -232,7 +242,15 @@ class _ScheduleTabContentState extends State<ScheduleTabContent> {
     final dateSelectorHeight = 70.0; // ScheduleDateSelector
     final filterHeight = 40.0; // Filter tabs
     final gapsHeight = 40.0; // Two 20px gaps
-    final listHeight = screenHeight - safePadding - topPadding - tabBarHeight - spacerHeight - dateSelectorHeight - filterHeight - gapsHeight;
+    final listHeight =
+        screenHeight -
+        safePadding -
+        topPadding -
+        tabBarHeight -
+        spacerHeight -
+        dateSelectorHeight -
+        filterHeight -
+        gapsHeight;
 
     return SizedBox(
       height: listHeight > 0 ? listHeight : 400,

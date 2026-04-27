@@ -1,4 +1,4 @@
-import 'package:attendance_cnn_app/features/admin/emloyee/models/shift_type.dart';
+import 'package:attendance_cnn_app/features/admin/employee/models/shift_type.dart';
 import 'package:attendance_cnn_app/utils/themes.dart';
 import 'package:flutter/material.dart';
 
@@ -61,17 +61,11 @@ class ShiftSelectionModal extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Select Shift',
-              style: boldTextStyle.copyWith(fontSize: 18),
-            ),
+            Text('Select Shift', style: boldTextStyle.copyWith(fontSize: 18)),
             SizedBox(height: 2),
             Text(
               employeeName,
-              style: mediumTextStyle.copyWith(
-                fontSize: 13,
-                color: greyColor,
-              ),
+              style: mediumTextStyle.copyWith(fontSize: 13, color: greyColor),
             ),
           ],
         ),
@@ -84,11 +78,7 @@ class ShiftSelectionModal extends StatelessWidget {
               shape: BoxShape.circle,
               color: greyColor.withValues(alpha: 0.1),
             ),
-            child: Icon(
-              Icons.close,
-              size: 18,
-              color: greyColor,
-            ),
+            child: Icon(Icons.close, size: 18, color: greyColor),
           ),
         ),
       ],
@@ -107,7 +97,11 @@ class ShiftSelectionModal extends StatelessWidget {
     );
   }
 
-  Widget _buildShiftOption(BuildContext context, ShiftType shift, bool isSelected) {
+  Widget _buildShiftOption(
+    BuildContext context,
+    ShiftType shift,
+    bool isSelected,
+  ) {
     return GestureDetector(
       onTap: () {
         onShiftSelected(shift);
@@ -125,10 +119,7 @@ class ShiftSelectionModal extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Text(
-              shift.emoji,
-              style: TextStyle(fontSize: 24),
-            ),
+            Text(shift.emoji, style: TextStyle(fontSize: 24)),
             SizedBox(width: 14),
             Expanded(
               child: Column(
@@ -153,11 +144,7 @@ class ShiftSelectionModal extends StatelessWidget {
               ),
             ),
             if (isSelected)
-              Icon(
-                Icons.check_circle,
-                color: primaryColor,
-                size: 20,
-              ),
+              Icon(Icons.check_circle, color: primaryColor, size: 20),
           ],
         ),
       ),

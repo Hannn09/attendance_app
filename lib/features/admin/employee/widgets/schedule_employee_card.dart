@@ -1,4 +1,4 @@
-import 'package:attendance_cnn_app/features/admin/emloyee/models/shift_type.dart';
+import 'package:attendance_cnn_app/features/admin/employee/models/shift_type.dart';
 import 'package:attendance_cnn_app/utils/themes.dart';
 import 'package:flutter/material.dart';
 
