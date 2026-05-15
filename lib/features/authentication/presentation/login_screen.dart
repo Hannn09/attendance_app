@@ -90,8 +90,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ),
                           SizedBox(height: 35),
                           LabeledTextField(
-                            label: 'Email',
-                            hint: 'Enter Email',
+                            label: 'Username',
+                            hint: 'Enter Username',
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
                             validator: (value) {
@@ -158,15 +158,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             ),
                           ),
 
-                          GestureDetector(
-                            onTap: () => context.go('/home/admin'),
-                            child: Text(
-                              'Login as Admin',
-                              style: mediumTextStyle.copyWith(
-                                color: primaryColor,
-                              ),
-                            ),
-                          ),
+                          // GestureDetector(
+                          //   onTap: () => context.go('/home/admin'),
+                          //   child: Text(
+                          //     'Login as Admin',
+                          //     style: mediumTextStyle.copyWith(
+                          //       color: primaryColor,
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),

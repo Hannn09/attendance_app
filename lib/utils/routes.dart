@@ -1,16 +1,17 @@
 import 'package:attendance_cnn_app/features/admin/employee/employee_screen.dart';
-import 'package:attendance_cnn_app/features/admin/employee/widgets/add_employee_screen.dart';
-import 'package:attendance_cnn_app/features/admin/home/home_admin_screen.dart';
+import 'package:attendance_cnn_app/features/admin/employee/presentation/screen/add_employee_screen.dart';
+import 'package:attendance_cnn_app/features/admin/home/presentation/screen/home_admin_screen.dart';
 import 'package:attendance_cnn_app/features/admin/main/main_admin_screen.dart';
-import 'package:attendance_cnn_app/features/admin/profile/profile_admin_screen.dart';
-import 'package:attendance_cnn_app/features/admin/report/report_screen.dart';
+import 'package:attendance_cnn_app/features/admin/profile/presentation/screen/profile_admin_screen.dart';
+import 'package:attendance_cnn_app/features/admin/report/presentation/screen/report_screen.dart';
 import 'package:attendance_cnn_app/features/authentication/presentation/login_screen.dart';
 import 'package:attendance_cnn_app/features/splash/splash_screen.dart';
 import 'package:attendance_cnn_app/features/user/attendance/attendance_screen.dart';
-import 'package:attendance_cnn_app/features/user/history/history_screen.dart';
-import 'package:attendance_cnn_app/features/user/home/home_screen.dart';
+import 'package:attendance_cnn_app/features/user/history/presentation/screen/history_screen.dart';
+import 'package:attendance_cnn_app/features/user/home/presentation/screen/home_screen.dart';
 import 'package:attendance_cnn_app/features/user/main/main_user_screen.dart';
-import 'package:attendance_cnn_app/features/user/profile/profile_screen.dart';
+import 'package:attendance_cnn_app/features/user/profile/presentation/screen/profile_screen.dart';
+import 'package:attendance_cnn_app/features/user/profile/presentation/screen/setting_account_screen.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
@@ -99,6 +100,10 @@ final GoRouter router = GoRouter(
           ],
         ),
       ],
+    ),
+    GoRoute(
+      path: '/setting-account',
+      builder: (context, state) => SettingAccountScreen(),
     ),
   ],
 );
