@@ -19,14 +19,26 @@ class ReportScreen extends ConsumerStatefulWidget {
 class _ReportScreenState extends ConsumerState<ReportScreen> {
   int _selectedFilterIndex = 0;
   String _searchQuery = '';
+  DateTime? _startDate;
+  DateTime? _endDate;
 
   void _showFilterModal() {
-    showModalBottomSheet(
-      context: context,
-      useRootNavigator: true,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => const ReportFilterModal(),
+    ReportFilterModal.show(
+      context,
+      initialStartDate: _startDate,
+      initialEndDate: _endDate,
+      onApply: (start, end) {
+        setState(() {
+          _startDate = start;
+          _endDate = end;
+        });
+      },
+      onReset: () {
+        setState(() {
+          _startDate = null;
+          _endDate = null;
+        });
+      },
     );
   }
 
@@ -47,6 +59,26 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
       case 0: // All - do nothing
       default:
         break;
+    }
+
+    // Apply date range filter
+    if (_startDate != null && _endDate != null) {
+      filtered = filtered.where((report) {
+        if (report.checkInTime == null) return false;
+        try {
+          final checkInDate = DateTime.parse(report.checkInTime!);
+          // Normalize dates to midnight for comparison
+          final normalizedCheckIn = DateTime(checkInDate.year, checkInDate.month, checkInDate.day);
+          final normalizedStart = DateTime(_startDate!.year, _startDate!.month, _startDate!.day);
+          final normalizedEnd = DateTime(_endDate!.year, _endDate!.month, _endDate!.day);
+
+          return normalizedCheckIn.isAtSameMomentAs(normalizedStart) ||
+                 normalizedCheckIn.isAtSameMomentAs(normalizedEnd) ||
+                 (normalizedCheckIn.isAfter(normalizedStart) && normalizedCheckIn.isBefore(normalizedEnd));
+        } catch (e) {
+          return false;
+        }
+      }).toList();
     }
 
     // Apply search filter

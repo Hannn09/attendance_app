@@ -3,17 +3,40 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ReportFilterModal extends StatefulWidget {
-  const ReportFilterModal({super.key});
+  final DateTime? initialStartDate;
+  final DateTime? initialEndDate;
+  final Function(DateTime startDate, DateTime endDate)? onApply;
+  final VoidCallback? onReset;
+
+  const ReportFilterModal({
+    super.key,
+    this.initialStartDate,
+    this.initialEndDate,
+    this.onApply,
+    this.onReset,
+  });
 
   @override
   State<ReportFilterModal> createState() => _ReportFilterModalState();
 
-  static void show(BuildContext context) {
+  static void show(
+    BuildContext context, {
+    DateTime? initialStartDate,
+    DateTime? initialEndDate,
+    Function(DateTime startDate, DateTime endDate)? onApply,
+    VoidCallback? onReset,
+  }) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useRootNavigator: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => const ReportFilterModal(),
+      builder: (context) => ReportFilterModal(
+        initialStartDate: initialStartDate,
+        initialEndDate: initialEndDate,
+        onApply: onApply,
+        onReset: onReset,
+      ),
     );
   }
 }
@@ -21,13 +44,14 @@ class ReportFilterModal extends StatefulWidget {
 class _ReportFilterModalState extends State<ReportFilterModal> {
   late DateTime startDate;
   late DateTime endDate;
-  String selectedReportType = 'All Attendance Logs';
 
   @override
   void initState() {
     super.initState();
-    startDate = DateTime.now().subtract(Duration(days: 30));
-    endDate = DateTime.now();
+    startDate =
+        widget.initialStartDate ??
+        DateTime.now().subtract(const Duration(days: 30));
+    endDate = widget.initialEndDate ?? DateTime.now();
   }
 
   Future<void> _selectStartDate(BuildContext context) async {
@@ -73,10 +97,8 @@ class _ReportFilterModalState extends State<ReportFilterModal> {
             _buildHeader(),
             SizedBox(height: 24),
             _buildDateRangeSection(),
-            SizedBox(height: 20),
-            _buildReportTypeSection(),
             Spacer(),
-            _buildExportButton(),
+            _buildActionButtons(),
           ],
         ),
       ),
@@ -159,74 +181,69 @@ class _ReportFilterModalState extends State<ReportFilterModal> {
     );
   }
 
-  Widget _buildReportTypeSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildActionButtons() {
+    return Row(
       children: [
-        Text('Report Type', style: mediumTextStyle.copyWith(fontSize: 14)),
-        SizedBox(height: 8),
-        Container(
-          height: 48,
-          padding: EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(
-            border: Border.all(color: borderColor),
-            borderRadius: BorderRadius.circular(8),
+        Expanded(
+          child: GestureDetector(
+            onTap: () {
+              widget.onReset?.call();
+              Navigator.pop(context);
+            },
+            child: Container(
+              height: 56,
+              decoration: BoxDecoration(
+                border: Border.all(color: primaryColor),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.refresh, color: primaryColor, size: 20),
+                  SizedBox(width: 8),
+                  Text(
+                    'Reset',
+                    style: boldTextStyle.copyWith(
+                      fontSize: 16,
+                      color: primaryColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: selectedReportType,
-              isExpanded: true,
-              icon: Icon(Icons.keyboard_arrow_down, color: greyColor),
-              items:
-                  [
-                        'All Attendance Logs',
-                        'Present Report',
-                        'Absent Report',
-                        'Late Report',
-                      ]
-                      .map(
-                        (type) => DropdownMenuItem(
-                          value: type,
-                          child: Text(type, style: regularTextStyle),
-                        ),
-                      )
-                      .toList(),
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() {
-                    selectedReportType = value;
-                  });
-                }
-              },
+        ),
+        SizedBox(width: 12),
+        Expanded(
+          child: GestureDetector(
+            onTap: () {
+              widget.onApply?.call(startDate, endDate);
+              Navigator.pop(context);
+            },
+            child: Container(
+              height: 56,
+              decoration: BoxDecoration(
+                color: primaryColor,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.check, color: whiteColor, size: 20),
+                  SizedBox(width: 8),
+                  Text(
+                    'Apply',
+                    style: boldTextStyle.copyWith(
+                      fontSize: 16,
+                      color: whiteColor,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildExportButton() {
-    return GestureDetector(
-      onTap: () {}, // To be implemented later
-      child: Container(
-        width: double.infinity,
-        height: 56,
-        decoration: BoxDecoration(
-          color: primaryColor,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.download, color: whiteColor, size: 20),
-            SizedBox(width: 8),
-            Text(
-              'Export Report',
-              style: boldTextStyle.copyWith(fontSize: 16, color: whiteColor),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

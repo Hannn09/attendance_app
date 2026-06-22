@@ -30,6 +30,13 @@ android {
         versionName = flutter.versionName
     }
 
+    packagingOptions {
+        jniLibs {
+            pickFirsts.add("lib/**/libtensorflowlite_jni.so")
+            pickFirsts.add("lib/**/libtensorflowlite_gpu_jni.so")
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.

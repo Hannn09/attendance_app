@@ -10,7 +10,7 @@ class ProfileNotifier extends AsyncNotifier<Users?> {
   @override
   FutureOr<Users?> build() async {
     // Only fetch if authenticated - don't watch to avoid rebuild loops
-    final authState = ref.read(authNotifierProvider);
+    final authState = ref.watch(authNotifierProvider);
 
     if (authState.isLoading || authState.value == null) {
       return null;

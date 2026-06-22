@@ -1,4 +1,6 @@
 import 'package:attendance_cnn_app/core/domain/models/users_model.dart';
+import 'package:attendance_cnn_app/features/authentication/presentation/providers/auth_notifier.dart';
+import 'package:attendance_cnn_app/features/user/attendance/presentation/providers/attendance_data_notifier.dart';
 import 'package:attendance_cnn_app/features/user/home/domain/models/dashboard_users_data.dart';
 import 'package:attendance_cnn_app/features/user/home/presentation/provider/dashboard_user_notifier.dart';
 import 'package:attendance_cnn_app/features/user/home/presentation/widgets/card_information_checkin.dart';
@@ -17,6 +19,19 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
+  void initState() {
+    super.initState();
+    // Attendance data will be fetched automatically when the provider is watched
+  }
+
+  Future<void> _refreshAttendanceData() async {
+    final profile = await ref.read(profileNotifierProvider.future);
+    if (profile != null) {
+      ref.invalidate(attendanceDataNotifierProvider(profile.id));
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final profileAsync = ref.watch(profileNotifierProvider);
     final dashboardAsync = ref.watch(dashboardUserNotifierProvider);
@@ -31,6 +46,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           onRefresh: () async {
             await ref.read(profileNotifierProvider.notifier).refetch();
             await ref.read(dashboardUserNotifierProvider.notifier).refetch();
+            await _refreshAttendanceData();
           },
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),

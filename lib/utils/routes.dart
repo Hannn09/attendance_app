@@ -6,7 +6,7 @@ import 'package:attendance_cnn_app/features/admin/profile/presentation/screen/pr
 import 'package:attendance_cnn_app/features/admin/report/presentation/screen/report_screen.dart';
 import 'package:attendance_cnn_app/features/authentication/presentation/login_screen.dart';
 import 'package:attendance_cnn_app/features/splash/splash_screen.dart';
-import 'package:attendance_cnn_app/features/user/attendance/attendance_screen.dart';
+import 'package:attendance_cnn_app/features/user/attendance/presentation/screen/attendance_screen.dart';
 import 'package:attendance_cnn_app/features/user/history/presentation/screen/history_screen.dart';
 import 'package:attendance_cnn_app/features/user/home/presentation/screen/home_screen.dart';
 import 'package:attendance_cnn_app/features/user/main/main_user_screen.dart';
@@ -21,7 +21,14 @@ final GoRouter router = GoRouter(
     GoRoute(path: '/login', builder: (context, state) => LoginScreen()),
     GoRoute(
       path: '/attendance',
-      builder: (context, state) => AttendanceScreen(),
+      builder: (context, state) {
+        final userId = (state.extra as Map<String, dynamic>?)?['userId'] as int?;
+        final faceEmbedding = (state.extra as Map<String, dynamic>?)?['faceEmbedding'] as List<double>?;
+        return AttendanceScreen(
+          userId: userId ?? 0,
+          faceEmbedding: faceEmbedding ?? [],
+        );
+      },
     ),
     GoRoute(
       path: '/add-employee',

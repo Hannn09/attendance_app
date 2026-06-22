@@ -8,6 +8,7 @@ class EmployeeModel {
   final String? facePicturePath;
   final String? password;
   final File? facePictureFile;
+  final List<double>? faceEmbedding;
 
   EmployeeModel({
     required this.id,
@@ -17,6 +18,7 @@ class EmployeeModel {
     this.facePicturePath,
     this.password,
     this.facePictureFile,
+    this.faceEmbedding,
   });
 
   factory EmployeeModel.fromJson(Map<String, dynamic> json) {
@@ -43,6 +45,10 @@ class EmployeeModel {
 
     if (password != null) {
       json['password'] = password!;
+    }
+
+    if (faceEmbedding != null) {
+      json['face_embedding'] = faceEmbedding!;
     }
 
     return json;

@@ -21,6 +21,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final profileAsync = ref.watch(profileNotifierProvider);
+    final authState = ref.watch(authNotifierProvider);
 
     // auth state listener
     ref.listen(authNotifierProvider, (previous, next) {

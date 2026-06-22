@@ -73,8 +73,8 @@ class ConfirmationDialog extends StatelessWidget {
               child: ElevatedButton(
                 style: primaryButtonStyle,
                 onPressed: () {
-                  context.pop();
                   onConfirm?.call();
+                  context.pop(true);
                 },
                 child: Text(
                   confirmText,

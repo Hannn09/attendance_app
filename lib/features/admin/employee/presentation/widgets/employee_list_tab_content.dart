@@ -20,6 +20,7 @@ class EmployeeListTabContent extends ConsumerWidget {
     // EmployeeListTabContent - ref.listen
     ref.listen(employeeActionNotifierProvider, (previous, next) async {
       if (next.hasValue &&
+          !next.hasError &&
           previous != null &&
           previous.isLoading &&
           context.mounted) {
@@ -39,21 +40,10 @@ class EmployeeListTabContent extends ConsumerWidget {
         ref.read(employeeActionNotifierProvider.notifier).reset();
         ref.invalidate(employeeListNotifierProvider);
       } else if (next.hasError && context.mounted) {
-        if (next.value == null) {
-          await ScaffoldMessenger.of(context)
-              .showSnackBar(
-                SnackBar(
-                  content: Text(
-                    next.error.toString(),
-                    style: mediumTextStyle.copyWith(color: whiteColor),
-                  ),
-                  backgroundColor: redColor,
-                  behavior: SnackBarBehavior.floating,
-                ),
-              )
-              .closed;
-          ref.read(employeeActionNotifierProvider.notifier).reset();
-        }
+        // Error is handled by the active screen (add/edit employee screen)
+        // Just reset state and refresh list
+        ref.read(employeeActionNotifierProvider.notifier).reset();
+        ref.invalidate(employeeListNotifierProvider);
       }
     });
 

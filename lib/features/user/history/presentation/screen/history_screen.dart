@@ -304,7 +304,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                     if (history.checkInTime != null)
                       _buildChecklogItem(
                         Icons.login_rounded,
-                        history.checkInTime!,
+                        _formatTime(history.checkInTime!),
                         greenColor,
                       ),
                     if (history.checkInTime != null &&
@@ -313,7 +313,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                     if (history.checkOutTime != null)
                       _buildChecklogItem(
                         Icons.logout_rounded,
-                        history.checkOutTime!,
+                        _formatTime(history.checkOutTime!),
                         primaryColor,
                       ),
                   ],
@@ -671,5 +671,25 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     if (lowerStatus.contains('absent')) return 'Absent';
 
     return status; // Return original if no match
+  }
+
+  String _formatTime(String? time) {
+    if (time == null || time.isEmpty) return '--:--';
+
+    try {
+      final parts = time.split(':');
+      if (parts.length >= 2) {
+        int hour = int.parse(parts[0]);
+        final minute = parts[1];
+
+        // Add 7 hours for UTC to WIB conversion
+        hour = (hour + 7) % 24;
+
+        return '${hour.toString().padLeft(2, '0')}:$minute';
+      }
+      return time;
+    } catch (e) {
+      return '--:--';
+    }
   }
 }

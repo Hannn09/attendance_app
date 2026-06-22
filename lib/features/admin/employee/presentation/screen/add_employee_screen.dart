@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:attendance_cnn_app/core/domain/models/employee_model.dart';
+import 'package:attendance_cnn_app/core/services/face_embedding_service.dart';
 import 'package:attendance_cnn_app/features/admin/employee/presentation/providers/employee_action_notifier.dart';
 import 'package:attendance_cnn_app/features/admin/employee/presentation/providers/employee_list_notifier.dart';
 import 'package:attendance_cnn_app/utils/themes.dart';
@@ -30,6 +31,8 @@ class _AddEmployeeScreenState extends ConsumerState<AddEmployeeScreen> {
   bool _obscurePassword = true;
   File? _facePictureFile;
   String? _existingFacePicturePath;
+  List<double>? _faceEmbedding;
+  bool _isGeneratingEmbedding = false;
 
   bool get _isEditMode => widget.employeeId != null;
 
@@ -98,6 +101,7 @@ class _AddEmployeeScreenState extends ConsumerState<AddEmployeeScreen> {
             .closed;
         ref.read(employeeActionNotifierProvider.notifier).reset();
       } else if (next.hasValue &&
+          !next.hasError &&
           previous != null &&
           previous.isLoading &&
           context.mounted) {
@@ -285,6 +289,7 @@ class _AddEmployeeScreenState extends ConsumerState<AddEmployeeScreen> {
         password: _passwordController.text.isNotEmpty
             ? _passwordController.text
             : null,
+        faceEmbedding: _faceEmbedding,
       );
 
       if (_isEditMode) {
@@ -446,15 +451,41 @@ class _AddEmployeeScreenState extends ConsumerState<AddEmployeeScreen> {
 
       if (pickedFile != null) {
         final compressedFile = await _compressImage(File(pickedFile.path));
-        if (mounted) {
-          setState(() {
-            _facePictureFile = compressedFile;
-          });
+
+        setState(() => _isGeneratingEmbedding = true);
+
+        try {
+          final embedding = await FaceEmbeddingService().generateEmbedding(
+            compressedFile,
+          );
+          if (mounted) {
+            setState(() {
+              _facePictureFile = compressedFile;
+              _faceEmbedding = embedding;
+              _isGeneratingEmbedding = false;
+            });
+          }
+        } catch (e) {
+          debugPrint('Error generating embedding: $e');
+          if (mounted) {
+            setState(() => _isGeneratingEmbedding = false);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Failed to generate face embedding. Please try again.',
+                  style: mediumTextStyle.copyWith(color: whiteColor),
+                ),
+                backgroundColor: redColor,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
         }
       }
     } catch (e) {
       debugPrint('Error picking image: $e');
       if (mounted) {
+        setState(() => _isGeneratingEmbedding = false);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -493,6 +524,7 @@ class _AddEmployeeScreenState extends ConsumerState<AddEmployeeScreen> {
     setState(() {
       _facePictureFile = null;
       _existingFacePicturePath = null;
+      _faceEmbedding = null;
     });
   }
 }

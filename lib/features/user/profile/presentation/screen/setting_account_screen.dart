@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:attendance_cnn_app/core/domain/models/employee_model.dart';
+import 'package:attendance_cnn_app/core/services/face_embedding_service.dart';
 import 'package:attendance_cnn_app/core/domain/models/users_model.dart';
 import 'package:attendance_cnn_app/features/user/profile/presentation/providers/profile_action_notifier.dart';
 import 'package:attendance_cnn_app/features/user/profile/presentation/providers/profile_notifier.dart';
@@ -31,6 +32,8 @@ class _SettingAccountScreenState extends ConsumerState<SettingAccountScreen> {
   bool _obscurePassword = true;
   File? _facePictureFile;
   bool _isLoading = true;
+  List<double>? _faceEmbedding;
+  bool _isGeneratingEmbedding = false;
 
   @override
   void initState() {
@@ -279,6 +282,7 @@ class _SettingAccountScreenState extends ConsumerState<SettingAccountScreen> {
         password: _passwordController.text.isNotEmpty
             ? _passwordController.text
             : null,
+        faceEmbedding: _faceEmbedding,
       );
 
       ref
@@ -426,15 +430,39 @@ class _SettingAccountScreenState extends ConsumerState<SettingAccountScreen> {
 
       if (pickedFile != null) {
         final compressedFile = await _compressImage(File(pickedFile.path));
-        if (mounted) {
-          setState(() {
-            _facePictureFile = compressedFile;
-          });
+
+        setState(() => _isGeneratingEmbedding = true);
+
+        try {
+          final embedding = await FaceEmbeddingService().generateEmbedding(compressedFile);
+          if (mounted) {
+            setState(() {
+              _facePictureFile = compressedFile;
+              _faceEmbedding = embedding;
+              _isGeneratingEmbedding = false;
+            });
+          }
+        } catch (e) {
+          debugPrint('Error generating embedding: $e');
+          if (mounted) {
+            setState(() => _isGeneratingEmbedding = false);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Failed to generate face embedding. Please try again.',
+                  style: mediumTextStyle.copyWith(color: whiteColor),
+                ),
+                backgroundColor: redColor,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
         }
       }
     } catch (e) {
       debugPrint('Error picking image: $e');
       if (mounted) {
+        setState(() => _isGeneratingEmbedding = false);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -472,6 +500,7 @@ class _SettingAccountScreenState extends ConsumerState<SettingAccountScreen> {
   void _removeFacePicture() {
     setState(() {
       _facePictureFile = null;
+      _faceEmbedding = null;
     });
   }
 }

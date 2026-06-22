@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:attendance_cnn_app/core/exception/failures.dart';
 import 'package:attendance_cnn_app/features/admin/employee/data/models/employee_list_response.dart';
 import 'package:attendance_cnn_app/features/admin/employee/data/models/employee_response.dart';
@@ -26,6 +28,9 @@ class EmployeeRemoteDataSource {
             bytes,
             filename: 'face_picture.jpg',
           ),
+          // Convert List<double> to JSON string for backend
+          if (data.faceEmbedding != null)
+            'face_embedding': jsonEncode(data.faceEmbedding),
         });
       } else {
         requestData = data.toJson();
@@ -62,6 +67,9 @@ class EmployeeRemoteDataSource {
             bytes,
             filename: 'face_picture.jpg',
           ),
+          // Convert List<double> to JSON string for backend
+          if (data.faceEmbedding != null)
+            'face_embedding': jsonEncode(data.faceEmbedding),
         });
       } else {
         requestData = data.toJson();

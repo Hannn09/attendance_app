@@ -13,8 +13,10 @@ class ReportListItem extends StatelessWidget {
 
     try {
       final dateTime = DateTime.parse(time);
-      final hour = dateTime.hour.toString().padLeft(2, '0');
-      final minute = dateTime.minute.toString().padLeft(2, '0');
+      // Add 7 hours for UTC to WIB conversion
+      final wibTime = dateTime.add(Duration(hours: 7));
+      final hour = wibTime.hour.toString().padLeft(2, '0');
+      final minute = wibTime.minute.toString().padLeft(2, '0');
       return '$hour:$minute';
     } catch (e) {
       return '--:--';

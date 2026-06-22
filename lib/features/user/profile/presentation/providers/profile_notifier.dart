@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ProfileNotifier extends AsyncNotifier<Users?> {
   @override
   FutureOr<Users?> build() async {
-    final authState = ref.read(authNotifierProvider);
+    final authState = ref.watch(authNotifierProvider);
 
     if (authState.isLoading || authState.value == null) {
       return null;

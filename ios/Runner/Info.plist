@@ -46,8 +46,12 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>We need camera access to take employee face pictures</string>
+	<string>We need camera access for face recognition attendance</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need photo library access to select employee face pictures</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location for attendance tracking</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We need your location for attendance tracking</string>
 </dict>
 </plist>

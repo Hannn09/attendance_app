@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:attendance_cnn_app/core/domain/models/employee_model.dart';
 import 'package:attendance_cnn_app/core/exception/failures.dart';
 import 'package:dio/dio.dart';
@@ -24,6 +26,9 @@ class ProfileUserRemoteDataSource {
             bytes,
             filename: 'face_picture.jpg',
           ),
+          // Convert List<double> to JSON array string for backend
+          if (data.faceEmbedding != null)
+            'face_embedding': jsonEncode(data.faceEmbedding),
         });
       } else {
         requestData = data.toJson();
