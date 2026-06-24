@@ -95,6 +95,37 @@ class ReportListItem extends StatelessWidget {
                     ),
                   ],
                 ),
+                if (report.checkInLatitude != null ||
+                    report.checkInLongitude != null ||
+                    report.checkOutLatitude != null ||
+                    report.checkOutLongitude != null)
+                  Padding(
+                    padding: EdgeInsets.only(top: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (report.checkInLatitude != null ||
+                            report.checkInLongitude != null)
+                          _buildLocationItem(
+                            Icons.location_on_rounded,
+                            greenColor,
+                            report.checkInLatitude.toString(),
+                            report.checkInLongitude.toString(),
+                          ),
+                        if (report.checkOutLatitude != null ||
+                            report.checkOutLongitude != null)
+                          Padding(
+                            padding: EdgeInsets.only(top: 4),
+                            child: _buildLocationItem(
+                              Icons.location_on_rounded,
+                              primaryColor,
+                              report.checkOutLatitude.toString(),
+                              report.checkOutLongitude.toString(),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
               ],
             ),
           ),
@@ -148,5 +179,36 @@ class ReportListItem extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Widget _buildLocationItem(
+    IconData icon,
+    Color color,
+    String? latitude,
+    String? longitude,
+  ) {
+    final locationText = _formatLocation(latitude, longitude);
+
+    return Row(
+      children: [
+        Icon(icon, color: color, size: 10),
+        SizedBox(width: 4),
+        Flexible(
+          child: Text(
+            locationText,
+            style: mediumTextStyle.copyWith(fontSize: 11, color: greyColor),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _formatLocation(String? latitude, String? longitude) {
+    if (latitude == null && longitude == null) return '';
+
+    final lat = latitude ?? 'N/A';
+    final lng = longitude ?? 'N/A';
+    return 'Lat: $lat, Lng: $lng';
   }
 }

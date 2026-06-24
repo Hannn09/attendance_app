@@ -20,9 +20,12 @@ class CardInformationCheckin extends ConsumerWidget {
         if (profile == null) {
           return _buildContent(context, ref, null, null);
         }
-        final attendanceAsync = ref.watch(attendanceDataNotifierProvider(profile.id));
+        final attendanceAsync = ref.watch(
+          attendanceDataNotifierProvider(profile.id),
+        );
         return attendanceAsync.when(
-          data: (attendance) => _buildContent(context, ref, attendance, profile),
+          data: (attendance) =>
+              _buildContent(context, ref, attendance, profile),
           loading: () => _buildLoadingContent(),
           error: (_, _) => _buildContent(context, ref, null, profile),
         );
@@ -32,10 +35,18 @@ class CardInformationCheckin extends ConsumerWidget {
     );
   }
 
-  Widget _buildContent(BuildContext context, WidgetRef ref, AttendanceData? attendance, Users? profile) {
+  Widget _buildContent(
+    BuildContext context,
+    WidgetRef ref,
+    AttendanceData? attendance,
+    Users? profile,
+  ) {
     final checkInTime = _formatTime(attendance?.checkInTime);
     final checkOutTime = _formatTime(attendance?.checkOutTime);
-    final workDuration = _calculateWorkDuration(attendance?.checkInTime, attendance?.checkOutTime);
+    final workDuration = _calculateWorkDuration(
+      attendance?.checkInTime,
+      attendance?.checkOutTime,
+    );
     final workProgress = _calculateWorkProgress(workDuration);
 
     return Container(
@@ -178,10 +189,7 @@ class CardInformationCheckin extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(12),
                   color: greyColor.withAlpha(50),
                 ),
-                child: Icon(
-                  Icons.center_focus_weak_rounded,
-                  color: greyColor,
-                ),
+                child: Icon(Icons.center_focus_weak_rounded, color: greyColor),
               ),
             ],
           ),
