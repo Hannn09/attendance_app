@@ -109,8 +109,8 @@ class ReportListItem extends StatelessWidget {
                           _buildLocationItem(
                             Icons.location_on_rounded,
                             greenColor,
-                            report.checkInLatitude.toString(),
-                            report.checkInLongitude.toString(),
+                            report.checkInLatitude?.toString(),
+                            report.checkInLongitude?.toString(),
                           ),
                         if (report.checkOutLatitude != null ||
                             report.checkOutLongitude != null)
@@ -119,8 +119,8 @@ class ReportListItem extends StatelessWidget {
                             child: _buildLocationItem(
                               Icons.location_on_rounded,
                               primaryColor,
-                              report.checkOutLatitude.toString(),
-                              report.checkOutLongitude.toString(),
+                              report.checkOutLatitude?.toString(),
+                              report.checkOutLongitude?.toString(),
                             ),
                           ),
                       ],
